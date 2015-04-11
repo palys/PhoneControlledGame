@@ -3,4 +3,10 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="ConnectButton_text">Connect</string>
+    <string name="ViewValues_text">View values</string>
+    <string name="title_activity_view_values">ViewValuesActivity</string>
+    <string name="AccelerometerLabel_text">Accelerometer:</string>
+    <string name="sensor_zero">0.000000</string>
+    <string name="Gyroscope_text">Gyroscope:</string>
 </resources>
