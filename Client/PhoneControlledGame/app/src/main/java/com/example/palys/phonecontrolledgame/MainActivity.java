@@ -7,11 +7,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 
 public class MainActivity extends ActionBarActivity {
 
     private Button viewValuesButton = null;
+
+    private Button connectButton = null;
+
+    private EditText pinEdit = null;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +55,8 @@ public class MainActivity extends ActionBarActivity {
 
     private void getViews() {
         viewValuesButton = (Button) findViewById(R.id.view_values_button);
+        connectButton = (Button) findViewById(R.id.connect_button);
+        pinEdit = (EditText) findViewById(R.id.pin_edit);
     }
 
     private void attachListeners() {
@@ -54,6 +64,15 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ViewValuesActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        connectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, CommunicateActivity.class);
+                intent.putExtra(CommunicateActivity.PIN, pinEdit.getText());
                 startActivity(intent);
             }
         });

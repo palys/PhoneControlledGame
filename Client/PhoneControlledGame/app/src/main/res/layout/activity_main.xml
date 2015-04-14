@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:ems="10"
-                android:id="@+id/editText"
+                android:id="@+id/pin_edit"
                 android:layout_weight="1" />
         </LinearLayout>
 

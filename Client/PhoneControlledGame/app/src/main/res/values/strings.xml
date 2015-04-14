@@ -9,4 +9,5 @@
     <string name="AccelerometerLabel_text">Accelerometer:</string>
     <string name="sensor_zero">0.000000</string>
     <string name="Gyroscope_text">Gyroscope:</string>
+    <string name="title_activity_communicate">CommunicateActivity</string>
 </resources>
