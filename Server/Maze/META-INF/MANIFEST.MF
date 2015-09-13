@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Maze
+Bundle-SymbolicName: Maze
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: maze.Activator
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.osgi,
+ com.google.guava;bundle-version="15.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy
+Import-Package: game
