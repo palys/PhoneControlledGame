@@ -30,10 +30,13 @@ public class Logic {
 	
 	private static final float scaley = 1f;
 	
+	private MazeGenerator mazeGenerator;
+	
 	public Logic(InputServer input) {
 		this.input = input;
 		this.players = new Player[4];
 		this.playerPosition = new HashMap<Player, Point2D.Float>();
+		this.mazeGenerator = new SampleMazeGenerator();
 	}
 	
 	public void restart() {
@@ -43,20 +46,7 @@ public class Logic {
 	}
 	
 	public void startGame() {
-		generateSampleMaze();
-	}
-	
-	private void generateSampleMaze() {
-		maze = new int[][]{
-				{0, 0, 0, 1, 2, 1, 0, 0, 0},
-				{0, 1, 1, 1, 0, 1, 0, 0, 0},
-				{0, 1, 0, 0, 0, 1, 1, 1, 1},
-				{1, 1, 0, 1, 0, 0, 0, 0, 1},
-				{1, 0, 0, 1, 1, 1, 1, 0, 1},
-				{1, 0, 1, 1, 0, 0, 0, 0, 1},
-				{1, 0, 0, 0, 0, 1, 1, 1, 1},
-				{1, 1, 1, 1, 3, 1, 1, 1, 0}
-		};
+		maze = mazeGenerator.generateMaze();
 	}
 	
 	private boolean collidesWithUnitSquare(Point2D.Float point, float radius, int x, int y) {
