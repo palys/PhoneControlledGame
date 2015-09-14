@@ -1,6 +1,8 @@
-package maze;
+package maze.randomGenerator;
 
 import java.awt.Point;
+
+import maze.MazeGenerator;
 
 import com.google.common.collect.Range;
 
@@ -14,21 +16,25 @@ public class RandomMazeGeneratorBuilder {
 	
 	private Point end = new Point(1, 0);
 	
-	public void width(int newWidth) {
+	public RandomMazeGeneratorBuilder width(int newWidth) {
 		
 		width = newWidth;
+		return this;
 	}
 	
-	public void height(int newHeight) {
+	public RandomMazeGeneratorBuilder height(int newHeight) {
 		height = newHeight;
+		return this;
 	}
 	
-	public void startPoint(Point newStartPoint) {
+	public RandomMazeGeneratorBuilder startPoint(Point newStartPoint) {
 		start = newStartPoint;
+		return this;
 	}
 	
-	public void endPoint(Point newEndPoint) {
+	public RandomMazeGeneratorBuilder endPoint(Point newEndPoint) {
 		end = newEndPoint;
+		return this;
 	}
 	
 	private void checkArgs() {

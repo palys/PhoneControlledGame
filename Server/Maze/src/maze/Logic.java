@@ -5,10 +5,13 @@ import game.Message;
 import game.Move;
 import game.Player;
 
+import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+
+import maze.randomGenerator.RandomMazeGeneratorBuilder;
 
 public class Logic {
 	
@@ -36,7 +39,13 @@ public class Logic {
 		this.input = input;
 		this.players = new Player[4];
 		this.playerPosition = new HashMap<Player, Point2D.Float>();
-		this.mazeGenerator = new SampleMazeGenerator();
+		this.mazeGenerator = new RandomMazeGeneratorBuilder()
+									.width(21)
+									.height(21)
+									.startPoint(new Point(15, 5))
+									.endPoint(new Point(3, 18))
+									.build();
+		//this.mazeGenerator = new SampleMazeGenerator();
 	}
 	
 	public void restart() {
