@@ -40,12 +40,11 @@ public class Logic {
 		this.players = new Player[4];
 		this.playerPosition = new HashMap<Player, Point2D.Float>();
 		this.mazeGenerator = new RandomMazeGeneratorBuilder()
-									.width(21)
-									.height(21)
-									.startPoint(new Point(15, 5))
-									.endPoint(new Point(3, 18))
+									.width(15)
+									.height(15)
+									.startPoint(new Point(4, 14))
+									.endPoint(new Point(14, 4))
 									.build();
-		//this.mazeGenerator = new SampleMazeGenerator();
 	}
 	
 	public void restart() {
@@ -55,6 +54,7 @@ public class Logic {
 	}
 	
 	public void startGame() {
+		System.out.println("Generating maze...");
 		maze = mazeGenerator.generateMaze();
 	}
 	
@@ -167,20 +167,32 @@ public class Logic {
 	
 	private Point2D.Float startingPoint() {
 		
+		System.out.println("Finding starting point");
+		
 		int x = 0, y = 0;
 
+		boolean found = false;
 		for (y = 0; y < maze.length; y++) {
 			for (x = 0; x < maze[y].length; x++) {
+				System.out.println(x + "," + y + " -> " + maze[y][x]);
 				if (maze[y][x] == 3) {
+					found = true;
 					break;
 				}
+			}
+			
+			if (found) {
+				break;
 			}
 		}
 		
 		float xf = x + 0.5f;
-		float yf = y - 0.5f;
+		float yf = y + 0.5f;
 		
-		return new Point2D.Float(xf, yf);
+		Point2D.Float startingPoint = new Point2D.Float(xf, yf);
+		System.out.println(startingPoint);
+		
+		return startingPoint;
 	}
 	
 	@SuppressWarnings("serial")
