@@ -123,7 +123,7 @@ public class Logic {
 					if (collidesWithUnitSquare(position, radius, x, y)) {
 						if (maze[y][x] == 1) {
 							return CollisionCheck.COLLIDES;
-						} else if (maze[y][x] == 2){
+						} else if (maze[y][x] == 2) {
 							return CollisionCheck.WIN;
 						}
 					}
@@ -132,6 +132,22 @@ public class Logic {
 		}
 		
 		return CollisionCheck.NOTCOLLIDES;
+	}
+	
+	private void gameEnded(Player winner) {
+		//FIXME
+		@SuppressWarnings("serial")
+		Message message = new Message() {
+
+			@SuppressWarnings("unchecked")
+			@Override
+			public <T extends Serializable> T getContent() {
+				return (T) "Game Over";
+			}
+			
+		};
+		input.onGameEnded(winner, message);
+		System.out.println("Game ended");
 	}
 	
 	public void onPlayerMoved(Player player, Move move) {
@@ -143,19 +159,10 @@ public class Logic {
 		
 		if (check == CollisionCheck.NOTCOLLIDES || check == CollisionCheck.WIN) {
 			playerPosition.put(player, newPos);
-		} else if (check == CollisionCheck.WIN) {
-			//FIXME
-			@SuppressWarnings("serial")
-			Message message = new Message() {
-
-				@SuppressWarnings("unchecked")
-				@Override
-				public <T extends Serializable> T getContent() {
-					return (T) "Game Over";
-				}
-				
-			};
-			input.onGameEnded(player, message);
+		} 
+		
+		if (check == CollisionCheck.WIN) {
+			gameEnded(player);
 		}
 	}
 	
