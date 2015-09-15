@@ -19,6 +19,8 @@ public class MainActivity extends ActionBarActivity {
 
     private EditText pinEdit = null;
 
+    private EditText nameEdit = null;
+
 
 
     @Override
@@ -57,6 +59,7 @@ public class MainActivity extends ActionBarActivity {
         viewValuesButton = (Button) findViewById(R.id.view_values_button);
         connectButton = (Button) findViewById(R.id.connect_button);
         pinEdit = (EditText) findViewById(R.id.pin_edit);
+        nameEdit = (EditText) findViewById(R.id.name_edit);
     }
 
     private void attachListeners() {
@@ -72,7 +75,10 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, CommunicateActivity.class);
-                intent.putExtra(CommunicateActivity.PIN, pinEdit.getText());
+                String pin = pinEdit.getText().toString();
+                String name = nameEdit.getText().toString();
+                intent.putExtra(CommunicateActivity.PIN, pin);
+                intent.putExtra(CommunicateActivity.NAME, name);
                 startActivity(intent);
             }
         });

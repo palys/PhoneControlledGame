@@ -1,6 +1,12 @@
 package com.example.palys.phonecontrolledgame;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -10,16 +16,42 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import java.util.UUID;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 
 public class CommunicateActivity extends ActionBarActivity implements SensorEventListener {
 
     public static final String PIN = "pin";
+    public static final String NAME = "name";
+
+    private static final int TIMEOUT = 60;
+
+    public static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     private String pin;
+    private String name;
+
+    private boolean playerLinked = false;
 
     private SensorManager sensorManager;
 
@@ -31,18 +63,92 @@ public class CommunicateActivity extends ActionBarActivity implements SensorEven
 
     private float[] currentGyro;
 
+    private BluetoothAdapter btAdapter;
+
+    private BluetoothDevice device;
+
+    private BroadcastReceiver mReceiver;
+
+    private EditText pinEditText;
+
+    private Button sendPinButton;
+
+    private OutputStream os;
+    private InputStream is;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_communicate);
-
+//        pinEditText = (EditText) findViewById(R.id.pinEditText);
+//        sendPinButton = (Button) findViewById(R.id.sendPinButton);
+//        sendPinButton.setText("Waiting...");
+//        sendPinButton.setEnabled(false);
+//        setSendPinButtonListener();
         initSensors();
         currentAcceleration = new float[3];
         currentGyro = new float[3];
-        
-        pin = getIntent().getStringExtra(PIN);
 
-        connect(pin);
+        device = null;
+        Log.i("L","start");
+        btAdapter = BluetoothAdapter.getDefaultAdapter();
+        Log.i("L","after default adapter");
+
+//        if (!btAdapter.isEnabled()){
+//            Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+//            startActivityForResult(enableBT, 0xDEADBEEF);
+//        }
+
+        btAdapter.startDiscovery();
+
+        Log.i("L","discovery started");
+
+        // Create a BroadcastReceiver for ACTION_FOUND
+        mReceiver = new BroadcastReceiver() {
+            public void onReceive(Context context, Intent intent) {
+                Log.i("L","onReceive");
+                String action = intent.getAction();
+                // When discovery finds a device
+                if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                    // Get the BluetoothDevice object from the Intent
+                    device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                    // Add the name and address to an array adapter to show in a ListView
+                    Log.i("device",device.getAddress());
+                    Log.i("device",device.getName());
+
+                }
+                Log.i("L","discovered");
+                btAdapter.cancelDiscovery();
+                pin = getIntent().getStringExtra(PIN);
+                name = getIntent().getStringExtra(NAME);
+                connect(pin, name);
+            }
+        };
+        // Register the BroadcastReceiver
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        registerReceiver(mReceiver, filter); // Don't forget to unregister during onDestroy
+
+
+    }
+
+    private void enableSendPinButton() {
+        sendPinButton.setText("Send PIN");
+        sendPinButton.setEnabled(true);
+    }
+
+    private void setSendPinButtonListener() {
+        sendPinButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pin = pinEditText.getText().toString();
+
+                try {
+                    os.write(pin.getBytes());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     private void initSensors() {
@@ -87,12 +193,61 @@ public class CommunicateActivity extends ActionBarActivity implements SensorEven
         return super.onOptionsItemSelected(item);
     }
 
-    private void connect(String pin) {
-        //TODO
+    private void connect(String pin, String name) {
+        Log.i("BT", "connect");
+        Log.i("PIN", "pin is " + pin);
+        try {
+            BluetoothSocket btSocket = device.createRfcommSocketToServiceRecord(MY_UUID);
+            Log.i("BT","socket opened");
+            btSocket.connect();
+            Log.i("BT","device connected");
+            os = btSocket.getOutputStream();
+            is = btSocket.getInputStream();
+
+            final ReaderWriter rw = new ReaderWriter(is,os,pin, name);
+
+            os.write(Commands.ACK.getBytes());
+            Log.i("ACK", "ack");
+
+            ExecutorService executor = Executors.newFixedThreadPool(4);
+
+            int t;
+            while((t = rw.waitForCommand()) != 3){
+                Log.i("LOOP", "actual number = " + t);
+            }
+            playerLinked = true;
+
+//            boolean flag = false;
+//            int t;
+//            while(!flag){
+//                if((t = is.available()) >= 1){
+//                    flag = true;
+//                    Log.i("BT", "ack");
+//                    byte[] b = new byte[t];
+//                    is.read(b);
+//                    //String answer = ByteBuffer.wrap(b).toString();
+//                    Log.i("BT", new String(b));
+//                }
+//            }
+//            String s = "Hello";
+//            os.write(s.getBytes());
+            //BufferedReader bReader=new BufferedReader(new InputStreamReader(is));
+            //String lineRead=bReader.readLine();
+            //Log.i("BT","received " + lineRead);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void send(String s) {
-        //TODO
+        if(playerLinked) {
+            Log.i("SEND", "sending " + s);
+            try {
+                os.write(s.getBytes());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -137,3 +292,5 @@ public class CommunicateActivity extends ActionBarActivity implements SensorEven
 
     }
 }
+
+

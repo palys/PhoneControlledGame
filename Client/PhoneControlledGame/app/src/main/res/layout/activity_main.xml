@@ -21,8 +21,28 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/ConnectButton_text"
-                android:id="@+id/connect_button" />
+                android:text="@string/NameButton_text"
+                android:id="@+id/name_button" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:ems="10"
+                android:id="@+id/name_edit"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="51dp">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/PinButton_text"
+                android:id="@+id/pin_button" />
 
             <EditText
                 android:layout_width="wrap_content"
@@ -31,6 +51,26 @@
                 android:ems="10"
                 android:id="@+id/pin_edit"
                 android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="51dp">
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/ConnectButton_text"
+                android:id="@+id/connect_button" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="270dp">
+
         </LinearLayout>
 
         <LinearLayout
