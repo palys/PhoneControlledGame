@@ -31,7 +31,30 @@ public class RandomMazeGanarator implements MazeGenerator {
 
 	@Override
 	public int[][] generateMaze() {
-
+		
+		int[][] maze;
+		if (primsMazeIsPossible()) {
+			
+			maze = new PrimsMazeGenerator(height, width, start, end).generateMaze();
+		} else {
+			
+			maze = generateBasicMaze();
+		}
+		
+		return maze;
+	}
+	
+	private boolean primsMazeIsPossible() {
+		return (height % 2 == 1) &&
+				(width % 2 == 1) &&
+				(start.x == width / 2) &&
+				(end.x == width / 2) &&
+				(start.y == height - 1) &&
+				(end.y == 0);
+	}
+	
+	private int[][] generateBasicMaze() {
+		
 		int[][] maze = fullMaze();
 		setStart(maze, start);
 		setEnd(maze, end);
