@@ -161,6 +161,6 @@ public class SPPServer{
             e.printStackTrace();
         }
 
-        (new ReaderWriter(player.getInputStream(),player.getOutputStream())).start();
+        (new ReaderWriter(player.getInputStream(),player.getOutputStream(), player.getPlayerName())).start();
     }
 }
