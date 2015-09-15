@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: phone-controlled-game
+Bundle-SymbolicName: phone-controlled-game
+Bundle-Version: 1.0.0.qualifier
+Export-Package: client,
+ server
+Import-Package: game,
+ org.osgi.framework;version="1.8.0"
