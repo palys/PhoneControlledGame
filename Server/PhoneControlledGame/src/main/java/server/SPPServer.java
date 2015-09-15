@@ -10,16 +10,16 @@ import java.util.Random;
 
 public class SPPServer{
 
-    private Player player;
+    private Phone player;
     private int authenticationNumber;
 
     public SPPServer() {
-        this.player = new Player();
+        this.player = new Phone();
         Random r = new Random();
         authenticationNumber = r.nextInt(9000) + 1000;
     }
 
-    public Player getPlayer(int playerNumber) {
+    public Phone getPlayer(int playerNumber) {
         setPlayerNumber(playerNumber);
         StreamConnection connection = waitForConnection();
         setInputAndOutputStream(connection);

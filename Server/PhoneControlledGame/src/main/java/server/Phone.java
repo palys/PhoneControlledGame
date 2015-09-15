@@ -4,7 +4,7 @@ import javax.microedition.io.StreamConnection;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class Player {
+public class Phone {
 
     private int playerNumber;
     private String playerName;
