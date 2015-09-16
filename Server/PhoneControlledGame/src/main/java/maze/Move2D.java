@@ -36,6 +36,14 @@ public class Move2D {
 		float x = dx * scalex * move.durationInSecconds();
 		float y = (-dy) * scaley * move.durationInSecconds();
 		
+		if (x * x + y * y > 1) {
+			float len2 = x * x + y * y;
+			float len = (float)Math.sqrt(len2);
+			
+			x /= len;
+			y /= len;
+		}
+		
 		return new Move2D(x, y);
 	}
 
