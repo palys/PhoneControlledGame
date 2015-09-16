@@ -32,7 +32,7 @@ public class Server{
         
     	InputServer sender = new Sender();
 		
-		Maze maze = new Maze(sender);
+		final Maze maze = new Maze(sender);
 		maze.startGame();
 
         try {
@@ -51,7 +51,7 @@ public class Server{
         FutureTask<Phone> future1 =
                 new FutureTask<Phone>(new Callable<Phone>() {
                     public Phone call() {
-                        SPPServer server = new SPPServer();
+                        SPPServer server = new SPPServer(maze);
                         return server.getPlayer(PLAYER1);
                     }});
         executor.execute(future1);
@@ -69,6 +69,7 @@ public class Server{
 				}
 			};
 			maze.onPlayerJoined(player);
+			Players.put(phone.getPlayerName(), player);
 			
         } catch (InterruptedException e) {
             e.printStackTrace();

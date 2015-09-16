@@ -1,9 +1,12 @@
 package server;
 
+import game.Game;
+
 import javax.bluetooth.UUID;
 import javax.microedition.io.Connector;
 import javax.microedition.io.StreamConnection;
 import javax.microedition.io.StreamConnectionNotifier;
+
 import java.io.*;
 import java.util.Arrays;
 import java.util.Random;
@@ -12,8 +15,11 @@ public class SPPServer{
 
     private Phone player;
     private int authenticationNumber;
+    
+    private Game game;
 
-    public SPPServer() {
+    public SPPServer(Game game) {
+    	this.game = game;
         this.player = new Phone();
         Random r = new Random();
         authenticationNumber = r.nextInt(9000) + 1000;
@@ -161,6 +167,6 @@ public class SPPServer{
             e.printStackTrace();
         }
 
-        (new ReaderWriter(player.getInputStream(),player.getOutputStream(), player.getPlayerName())).start();
+        (new ReaderWriter(player.getInputStream(),player.getOutputStream(), player.getPlayerName(), game)).start();
     }
 }
