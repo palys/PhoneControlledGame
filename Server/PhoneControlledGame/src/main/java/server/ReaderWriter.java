@@ -46,9 +46,9 @@ public class ReaderWriter extends Thread {
                     JSONObject obj = new JSONObject(jsonString);
                     JSONObject acceleration = obj.getJSONObject("Acceleration");
                     
-                    double x = acceleration.getDouble("X");
-                    double y = acceleration.getDouble("Y");
-                    double z = acceleration.getDouble("Z");
+                    double x = -acceleration.getDouble("X")/20;
+                    double z = 0;
+                    double y = -9.81 + (9.81 -acceleration.getDouble("Y")) / 20;
                     
                     float[] acc = new float[]{(float)x, (float)y, (float)z};
                     float duration = diff / 1000.f;
