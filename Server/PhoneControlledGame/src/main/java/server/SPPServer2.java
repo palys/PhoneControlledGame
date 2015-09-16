@@ -11,15 +11,15 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.Random;
 
-public class SPPServer{
+public class SPPServer2{
 
     private Phone player;
     private int authenticationNumber;
-    
+
     private Game game;
 
-    public SPPServer(Game game) {
-    	this.game = game;
+    public SPPServer2(Game game) {
+        this.game = game;
         this.player = new Phone();
         Random r = new Random();
         authenticationNumber = r.nextInt(9000) + 1000;
@@ -43,7 +43,7 @@ public class SPPServer{
     private StreamConnection waitForConnection(){
         try {
             //Create a UUID for SPP
-            UUID uuid = new UUID("1101", true);
+            UUID uuid = new UUID("1102", true);
 
             //Create the service url
             String connectionString = "btspp://localhost:" + uuid + ";name=Simple SPP Server";

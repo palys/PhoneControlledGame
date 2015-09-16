@@ -39,11 +39,13 @@ public class PrimsMazeGenerator implements MazeGenerator {
 	public PrimsMazeGenerator(int height, int width, Point start, Point end) {
 		
 		super();
+		this.random = new Random();
 		this.height = height;
 		this.width = width;
-		this.start = start;
-		this.end = end;
-		this.random = new Random();
+
+		this.start = new Point(random.nextInt(width / 2) * 2 + 1, start.y);
+		this.end = new Point(random.nextInt(width / 2) * 2 + 1, end.y);
+
 	}
 
 	@Override

@@ -46,9 +46,9 @@ public class ReaderWriter extends Thread {
                     JSONObject obj = new JSONObject(jsonString);
                     JSONObject acceleration = obj.getJSONObject("Acceleration");
                     
-                    double x = -acceleration.getDouble("X")/20;
+                    double x = -acceleration.getDouble("X")/5;
                     double z = 0;
-                    double y = -9.81 + (9.81 -acceleration.getDouble("Y")) / 20;
+                    double y = -9.81f -acceleration.getDouble("Y") / 5;
                     
                     float[] acc = new float[]{(float)x, (float)y, (float)z};
                     float duration = diff / 1000.f;
@@ -59,7 +59,7 @@ public class ReaderWriter extends Thread {
                     
                     game.onPlayerMoved(p, m);
                     
-                    System.out.println(jsonString + "\n" + "x=" + x + " y=" + y + " z=" + z);
+                    //System.out.println(jsonString + "\n" + "x=" + x + " y=" + y + " z=" + z);
                 }
             } catch (IOException e) {
                 e.printStackTrace();

@@ -85,24 +85,38 @@ public class Server{
 //            e.printStackTrace();
 //        }
 
-//        //waiting for player2 to connect
-//        FutureTask<Player> future2 =
-//                new FutureTask<Player>(new Callable<Player>() {
-//                    public Player call() {
-//                        SPPServer server = new SPPServer();
-//                        return server.getPlayer(PLAYER2);
-//                    }});
-//        executor.execute(future2);
-//        try {
-//             player2 = future1.get(TIMEOUT,TimeUnit.SECONDS);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//        } catch (TimeoutException e) {
-//            e.printStackTrace();
-//        }
-        
+        //waiting for player2 to connect
+        FutureTask<Phone> future2 =
+                new FutureTask<Phone>(new Callable<Phone>() {
+                    public Phone call() {
+                        SPPServer2 server = new SPPServer2(maze);
+                        return server.getPlayer(PLAYER2);
+                    }});
+        executor.execute(future2);
+        try {
+             player2 = future2.get(TIMEOUT,TimeUnit.SECONDS);
+
+            final Phone phone = player2;
+            System.out.println("Player 2 connected successfully");
+            Player player = new Player() {
+
+                @Override
+                public String getName() {
+
+                    return phone.getPlayerName();
+                }
+            };
+            maze.onPlayerJoined(player);
+            Players.put(phone.getPlayerName(), player);
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        }
+
     }
     
 }
